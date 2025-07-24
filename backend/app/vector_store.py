@@ -8,7 +8,11 @@ class TableSemanticIndexer:
         api_key = os.getenv("OPENAI_API_KEY")
         self.chroma = chromadb.Client()
         self.embeddings = OpenAIEmbeddings(api_key=api_key)
-        self.collection = self.chroma.create_collection("table_names")
+        try:
+            self.collection = self.chroma.create_collection("table_names")
+        except Exception:
+            # Collection already exists, get it instead
+            self.collection = self.chroma.get_collection("table_names")
 
     def index_table_names(self, db_names, engines):
         engine = engines["all"]
@@ -26,5 +30,8 @@ class TableSemanticIndexer:
 
     def query(self, query: str, n: int = 3):
         emb = self.embeddings.embed_query(query)
-        results = self.collection.query(embeddings=[emb], n_results=n)
-        return results["documents"], results["metadatas"]
+        results = self.collection.query(query_embeddings=[emb], n_results=n)
+        # ChromaDB returns lists of lists, so we need to flatten them
+        documents = results["documents"][0] if results["documents"] else []
+        metadatas = results["metadatas"][0] if results["metadatas"] else []
+        return documents, metadatas

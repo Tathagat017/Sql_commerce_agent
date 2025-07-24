@@ -4,8 +4,12 @@ from langchain_openai import ChatOpenAI
 from langchain_community.agent_toolkits.sql.base import create_sql_agent
 import os
 from sqlalchemy import text
+from dotenv import load_dotenv
 
 from app.db_pool import get_attached_engine
+
+# Ensure environment variables are loaded
+load_dotenv()
 
 def get_attached_tables_info(engine):
     """Get comprehensive table information for all attached databases"""

@@ -1,0 +1,24 @@
+/* index.css */
+
+html,
+body,
+#root {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  background-image: linear-gradient(to top, #bad7f7 0%, #e7f0fd 100%);
+}
+
+body {
+  font-family: sans-serif;
+  background-image: linear-gradient(
+    to top,
+    #bad7f7 0%,
+    #e7f0fd 100%
+  ); /* optional default background */
+}
+
+* {
+  box-sizing: border-box;
+}
